@@ -1,0 +1,31 @@
+{
+  "name": "ai-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "termAi": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/community": "^0.2.22",
+    "@langchain/openai": "^0.2.5",
+    "advanced-calculator": "^1.1.1",
+    "chalk": "^5.3.0",
+    "cli-html": "^4.2.0",
+    "cli-table": "^0.3.11",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.2.12",
+    "marked-terminal": "^7.1.0",
+    "openai": "^4.53.2",
+    "pdf-parse": "^1.1.1",
+    "youtube-transcript": "^1.2.1",
+    "youtubei.js": "^10.3.0"
+  }
+}

@@ -33,6 +33,12 @@ Once the application is running, you can interact with the terminal assistant by
 - `joke`: Displays a random joke.
 - `quote`: Retrieves an inspirational quote.
 
+---
+
+## QA - RAG
+
+You can run node qa "Question here" in the root of the project and you can load a file from a path and it will return the the response from the file.
+
 Feel free to explore and experiment with different commands to make the most out of this terminal assistant.
 
 ## Contributing

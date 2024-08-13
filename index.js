@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import openai from "./openai.js";
-import readline from "node:readline";
+import chalk from "chalk";
+import cliHtml from "cli-html";
 import { marked } from "marked";
 import { markedTerminal } from "marked-terminal";
-import cliHtml from "cli-html";
-import chalk from "chalk";
-import Table from "cli-table";
+import readline from "node:readline";
+import openai from "./openai.js";
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,

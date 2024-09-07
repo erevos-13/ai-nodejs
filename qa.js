@@ -1,11 +1,10 @@
 import openai from "./openai.js";
 
-import { Document } from "langchain/document";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { CharacterTextSplitter } from "langchain/text_splitter";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 const question = process.argv[2] || "hi";
 const video = `https://youtu.be/zR_iuq2evXo?si=cG8rODgRgXOx9_Cn`;

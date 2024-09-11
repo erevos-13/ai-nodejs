@@ -19,7 +19,7 @@ const rl = readline.createInterface({
 
 const message = async (history, message) => {
   const result = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
+    model: process.env.OPEN_AI_MODEL,
     messages: [...history, message],
     temperature: 0.4, //INFO how creative the AI's responses are
   });
@@ -37,19 +37,38 @@ const chat = () => {
   ];
   const start = () => {
     rl.question('You: ', async (userInput) => {
+      console.log('userInput:', userInput);
       if (userInput.toLowerCase() === 'exit') {
         rl.close();
         return;
       }
-      const response = await message(
-        history.map(({ content }) => formatMessage(content)),
-        formatMessage(userInput)
-      );
-      console.log(chalk.black.bgGreenBright(`Bot:=========================`));
-      marked.use(markedTerminal);
-      console.log(cliHtml(marked.parse(`${response.toString()}`)));
-      history.push({ role: 'bot', content: response });
-      start();
+      // Select a spinner style from cli-spinners
+      const spinnerStyle = cliSpinners.dots; // You can choose any spinner style from cli-spinners
+
+      // Create an ora spinner with the selected style
+      const spinner = ora({
+        text: 'Loading...\n',
+        spinner: spinnerStyle,
+        discardStdin: false,
+      }).start();
+      try {
+        const response = await message(
+          history.map(({ content }) => formatMessage(content)),
+          formatMessage(userInput)
+        );
+        spinner.succeed('Response from the Helper Assistant:');
+        marked.use(markedTerminal);
+        console.log(cliHtml(marked.parse(`${response.toString()}`)));
+        history.push({ role: 'bot', content: response });
+      } catch (error) {
+        spinner.fail('Failed to generate response message');
+        console.error(error);
+      } finally {
+        spinner.stop();
+        // Clear the line to remove any spinner artifacts
+        process.stdout.write('\x1B[2K\x1B[0G');
+        start();
+      }
     });
   };
   start();
@@ -80,5 +99,6 @@ const imageGenerator = async () => {
 yargs(hideBin(process.argv))
   .command('chat', 'Start chatbot', chat)
   .command('img', 'Generate image from your terminal', imageGenerator)
+  .command('qa', 'Question and Answer')
   .demandCommand(1)
   .parse();

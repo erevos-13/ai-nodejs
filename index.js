@@ -11,6 +11,7 @@ import cliSpinners from 'cli-spinners';
 import readline from 'node:readline';
 import openai from './openai.js';
 import toolImage from './image-ai.js';
+import qAQuery from './qa.js';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -99,6 +100,25 @@ const imageGenerator = async () => {
 yargs(hideBin(process.argv))
   .command('chat', 'Start chatbot', chat)
   .command('img', 'Generate image from your terminal', imageGenerator)
-  .command('qa', 'Question and Answer')
+  .command(
+    'qa',
+    'Question and Answer',
+    (yargs) => {
+      yargs
+        .option('file', {
+          alias: 'f',
+          describe: 'Path to the PDF file',
+          type: 'string',
+          demandOption: true,
+        })
+        .option('question', {
+          alias: 'q',
+          describe: 'Question to ask',
+          type: 'string',
+          demandOption: true,
+        });
+    },
+    qAQuery
+  )
   .demandCommand(1)
   .parse();

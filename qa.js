@@ -1,4 +1,4 @@
-import path, { relative } from 'path';
+import path from 'path';
 import openai from './openai.js';
 
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
@@ -10,8 +10,8 @@ const createStore = (docs) =>
   MemoryVectorStore.fromDocuments(docs, new OpenAIEmbeddings());
 
 const docsFromPDF = async (relativePath) => {
-  normalizePath = path.normalize(relativePath);
-  const loader = new PDFLoader(relativePath);
+  const normalizePath = path.normalize(relativePath);
+  const loader = new PDFLoader(normalizePath);
   const docs = await loader.load();
   const splitter = new CharacterTextSplitter({
     separator: '. ', //INFO do not split in the middle of a sentence
@@ -26,17 +26,18 @@ const loadStore = async (relativePath) => {
   return createStore([...pdfDocs]);
 };
 
-const query = async (relativePath, question) => {
-  const store = await loadStore(relativePath);
+const qAQuery = async (args) => {
+  const { file, question } = args;
+  const store = await loadStore(file);
   const result = await store.similaritySearch(question, 2);
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
+    model: process.env.OPEN_AI_MODEL,
     temperature: 0, //INFO 0 is deterministic for the document QA
     messages: [
       {
         role: 'system',
         content:
-          'You are a helpful AI assistant. Answser questions to your best ability.',
+          'You are a helpful AI assistant. Answer questions to your best ability.',
       },
       {
         role: 'user',
@@ -53,4 +54,4 @@ const query = async (relativePath, question) => {
       .join(', ')}`
   );
 };
-query(relativePath, question);
+export default qAQuery;

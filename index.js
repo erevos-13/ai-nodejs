@@ -38,7 +38,6 @@ const chat = () => {
   ];
   const start = () => {
     rl.question('You: ', async (userInput) => {
-      console.log('userInput:', userInput);
       if (userInput.toLowerCase() === 'exit') {
         rl.close();
         return;
